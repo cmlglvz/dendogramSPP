@@ -14,17 +14,16 @@ library(htmlwidgets)
 ```
 
 ```{r dataframes, echo=FALSE, include=FALSE}
-APwATs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/heatmapASV/master/Data/APwATs.csv", header = TRUE, sep = ";", dec = ".", skip = 0)
-rownames(APwATs) <- APwATs[, 1]
-oASVs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/heatmapASV/master/Data/oASVs.csv", header = TRUE, sep = ";", dec = ".", skip = 0)
+APwATs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/datasets/master/Data/eAnalisis/APwATs.csv")
+oASVs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/datasets/master/Data/eAnalisis/oASVs.csv")
 rownames(oASVs) <- oASVs[, 1]
 oASVs <- oASVs[, -1]
-xTXs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/heatmapSPP/master/Data/xTXs.csv", header = TRUE, sep = ";", dec = ".", skip = 0)
+xTXs <- read.csv2("https://raw.githubusercontent.com/cmlglvz/datasets/master/Data/eAnalisis/xTXs.csv")
 rownames(xTXs) <- xTXs[, 1]
 xTXs <- xTXs[, -1]
 ```
 
-```{r, echo=TRUE, message=TRUE, warning=TRUE, include=FALSE}
+```{r function, echo=TRUE, message=TRUE, warning=TRUE, include=FALSE}
 Tax.sum <- function(OTU.Table, Tax.Table, Tax.lvl ){
   z <- NULL
   y <- NULL
@@ -41,7 +40,7 @@ Tax.sum <- function(OTU.Table, Tax.Table, Tax.lvl ){
 }
 ```
 
-```{r, echo=FALSE, include=FALSE}
+```{r heatnap, echo=FALSE, include=FALSE}
 Shared <- APwATs %>% filter(Cha == 1 & Fla == 1 & Hu == 1 & Pc == 1)
 ShaSeq <- Shared[, 2]
 ShaASVs <- select(oASVs, all_of(ShaSeq))
@@ -49,5 +48,10 @@ ShaSPPs <- Tax.sum(ShaASVs, xTXs, 10)
 ShaSPPs <- ShaSPPs[, -17]
 hmSPPd <- heatmaply(normalize(ShaSPPs), 
                       main = "Shared ASVs across all sites as Species")
-saveWidget(hmSPPd, file = "D:/Documents/GitHub/Interactive/dendogramSPP/index.html")
 ```
+
+```{r plot, echo=FALSE, include=FALSE}
+hmSPPd
+saveWidget(hmSPPd, file = "/Users/Artemis/Documents/GitHub/dendogramSPP/index.html")
+```
+
